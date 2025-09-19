@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "jflex",
+            "type": "shell",
+            "command": "java -jar ./libs/jflex-full-1.9.1.jar -d ./src ./src/JflexCompi.flex",
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "javac -d ./out ./src/*.java",
+            "dependsOn": ["jflex"],
+            "problemMatcher": []
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "java -cp ./out Main",
+            "dependsOn": ["build"],
+            "problemMatcher": []
+        }
+    ]
+}
+
+
+
