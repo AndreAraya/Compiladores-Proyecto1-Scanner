@@ -68,169 +68,368 @@ program
       variable_sections_opt
       function_list_opt
       block
+      {: 
+        System.out.println("Entrando a la producción de 'program' con 'PROGRAM IDENTIFIER SEMICOLON'");
+      :}
    | PROGRAM IDENTIFIER SEMICOLON
       variable_sections_opt
       function_list_opt
       error
-      {: System.err.println("⚠️ Error en el bloque principal."); :}
+      {: 
+        System.err.println("⚠️ Error en el bloque principal.");
+      :}
    ;
 
 /* ===== Bloque principal BEGIN...END ===== */
 block
-  ::= BEGIN statement_list END 
+  ::= BEGIN statement_list END
+      {: 
+        System.out.println("Entrando al bloque principal con 'BEGIN statement_list END'");
+      :}
    | BEGIN error END 
-      {: System.err.println("⚠️ Error dentro del bloque principal."); :}
+      {: 
+        System.err.println("⚠️ Error dentro del bloque principal.");
+      :}
    ;
 
 /* ===== Declaraciones VAR ===== */
 variable_sections_opt
   ::= /* vacío */
    | variable_sections
+      {: 
+        System.out.println("Procesando variable_sections...");
+      :}
    ;
 
 variable_sections
   ::= VAR decl_group_list SEMICOLON
+      {: 
+        System.out.println("Procesando 'VAR decl_group_list SEMICOLON'...");
+      :}
    | VAR decl_group_list SEMICOLON variable_sections
+      {: 
+        System.out.println("Procesando 'VAR decl_group_list SEMICOLON variable_sections'...");
+      :}
    | VAR error SEMICOLON
-      {: System.err.println("⚠️ Error en bloque VAR."); :}
+      {: 
+        System.err.println("⚠️ Error en bloque VAR.");
+      :}
    ;
 
 decl_group_list
   ::= decl_group_list decl_group
+      {: 
+        System.out.println("Procesando 'decl_group_list decl_group'...");
+      :}
    | decl_group
+      {: 
+        System.out.println("Procesando 'decl_group'...");
+      :}
    ;
 
 decl_group
   ::= variable_declaration_item_list COLON type SEMICOLON
+      {: 
+        System.out.println("Procesando declaración de variables: 'variable_declaration_item_list COLON type SEMICOLON'...");
+      :}
    ;
 
 variable_declaration_item_list
   ::= variable_declaration_item_list COMMA variable_declaration_item
+      {: 
+        System.out.println("Procesando 'variable_declaration_item_list COMMA variable_declaration_item'...");
+      :}
    | variable_declaration_item
+      {: 
+        System.out.println("Procesando 'variable_declaration_item'...");
+      :}
    ;
 
 variable_declaration_item
   ::= IDENTIFIER
+      {: 
+        System.out.println("Procesando variable IDENTIFIER...");
+      :}
    ;
 
 /* ===== Tipos ===== */
 type
   ::= STRING_KEYWORD
+      {: 
+        System.out.println("Tipo: STRING_KEYWORD");
+      :}
    | INT_KEYWORD
+      {: 
+        System.out.println("Tipo: INT_KEYWORD");
+      :}
    | REAL_KEYWORD
+      {: 
+        System.out.println("Tipo: REAL_KEYWORD");
+      :}
    | CHAR_KEYWORD
+      {: 
+        System.out.println("Tipo: CHAR_KEYWORD");
+      :}
    ;
 
 /* ===== Funciones y procedimientos ===== */
 function_list_opt
   ::= /* vacío */
    | function_list
+      {: 
+        System.out.println("Procesando lista de funciones...");
+      :}
    ;
 
 function_list
   ::= function_list function_declaration
+      {: 
+        System.out.println("Procesando 'function_declaration' en 'function_list'...");
+      :}
    | function_list procedure_declaration
+      {: 
+        System.out.println("Procesando 'procedure_declaration' en 'function_list'...");
+      :}
    | function_declaration
+      {: 
+        System.out.println("Procesando 'function_declaration'...");
+      :}
    | procedure_declaration
+      {: 
+        System.out.println("Procesando 'procedure_declaration'...");
+      :}
    ;
 
 /* ===== FUNCTION ===== */
 function_declaration
   ::= FUNCTION IDENTIFIER LPAREN parameter_list_opt RPAREN COLON type
       BEGIN variable_sections_opt statement_list return_statement END SEMICOLON
+      {: 
+        System.out.println("Declaración de función encontrada");
+      :}
    | FUNCTION IDENTIFIER LPAREN error RPAREN COLON type BEGIN statement_list END SEMICOLON
-      {: System.err.println("⚠️ Error en parámetros de función."); :}
+      {: 
+        System.err.println("⚠️ Error en parámetros de función.");
+      :}
    ;
 
 return_statement
   ::= IDENTIFIER ASSIGN expression SEMICOLON
-      {: System.out.println("📤 Retorno de función detectado correctamente."); :}
+      {: 
+        System.out.println("Procesando return_statement: IDENTIFIER ASSIGN expression SEMICOLON");
+      :}
    | error SEMICOLON
-      {: System.err.println("⚠️ Falta retorno correcto en función."); :}
+      {: 
+        System.err.println("⚠️ Falta retorno correcto en función.");
+      :}
    ;
 
 /* ===== PROCEDURE ===== */
 procedure_declaration
   ::= PROCEDURE IDENTIFIER LPAREN parameter_list_opt RPAREN
       BEGIN variable_sections_opt statement_list END SEMICOLON
+      {: 
+        System.out.println("Declaración de procedimiento encontrada");
+      :}
    | PROCEDURE IDENTIFIER LPAREN error RPAREN BEGIN statement_list END SEMICOLON
-      {: System.err.println("⚠️ Error en parámetros de procedimiento."); :}
+      {: 
+        System.err.println("⚠️ Error en parámetros de procedimiento.");
+      :}
    ;
 
 parameter_list_opt
   ::= /* vacío */
    | parameter_list
+      {: 
+        System.out.println("Procesando lista de parámetros...");
+      :}
    ;
 
 parameter_list
   ::= parameter_list COMMA parameter
+      {: 
+        System.out.println("Procesando parámetros separados por coma...");
+      :}
    | parameter
+      {: 
+        System.out.println("Procesando un solo parámetro...");
+      :}
    ;
 
 parameter
   ::= type IDENTIFIER
+      {: 
+        System.out.println("Procesando parámetro de tipo IDENTIFIER...");
+      :}
    ;
 
 /* ===== Sentencias ===== */
 statement_list
-  ::= statement_list statement 
+  ::= statement_list statement
+      {: 
+        System.out.println("Procesando lista de sentencias...");
+      :}
    | statement
+      {: 
+        System.out.println("Procesando una sola sentencia...");
+      :}
    ;
 
-
 statement
-  ::= BEGIN statement_list END
-   | IF expression THEN statement
+  ::= IF expression THEN statement
+      {: 
+        System.out.println("Procesando sentencia IF...");
+      :}
    | IF expression THEN statement ELSE statement
+      {: 
+        System.out.println("Procesando sentencia IF con ELSE...");
+      :}
    | WHILE expression DO statement
+      {: 
+        System.out.println("Procesando sentencia WHILE...");
+      :}
    | FOR IDENTIFIER ASSIGN expression TO expression DO statement
+      {: 
+        System.out.println("Procesando sentencia FOR...");
+      :}
    | FOR IDENTIFIER ASSIGN expression DOWNTO expression DO statement
+      {: 
+        System.out.println("Procesando sentencia FOR con DOWNTO...");
+      :}
    | IDENTIFIER ASSIGN expression SEMICOLON
-   | READ LPAREN arg_list_opt RPAREN SEMICOLON      /* ✅ puede no tener parámetros */
-   | WRITE LPAREN arg_list RPAREN SEMICOLON         /* ✅ debe tener al menos uno */
-   | variable_section
+      {: 
+        System.out.println("Procesando asignación: IDENTIFIER ASSIGN expression SEMICOLON");
+      :}
+   | READ LPAREN arg_list_opt RPAREN SEMICOLON
+      {: 
+        System.out.println("Procesando sentencia READ...");
+      :}
+   | WRITE LPAREN arg_list RPAREN SEMICOLON
+      {: 
+        System.out.println("Procesando sentencia WRITE...");
+      :}
    | error SEMICOLON
-      {: System.err.println("⚠️ Error general en sentencia."); :}
+      {: 
+        System.err.println("⚠️ Error general en sentencia.");
+      :}
    ;
 
 /* ===== Argumentos ===== */
 arg_list_opt
   ::= /* vacío */
    | arg_list
+      {: 
+        System.out.println("Procesando lista de argumentos...");
+      :}
    ;
 
 arg_list
   ::= arg_list COMMA expression
+      {: 
+        System.out.println("Procesando argumento separado por coma...");
+      :}
    | expression
+      {: 
+        System.out.println("Procesando un solo argumento...");
+      :}
    ;
 
 /* ===== Expresiones ===== */
 expression
   ::= NUMBER
+      {: 
+        System.out.println("Procesando número: NUMBER");
+      :}
    | REAL_NUMBER
+      {: 
+        System.out.println("Procesando número real: REAL_NUMBER");
+      :}
    | STRING_LITERAL
+      {: 
+        System.out.println("Procesando literal de cadena: STRING_LITERAL");
+      :}
    | CHAR_LITERAL
+      {: 
+        System.out.println("Procesando literal de carácter: CHAR_LITERAL");
+      :}
    | IDENTIFIER
-   | IDENTIFIER LPAREN arg_list_opt RPAREN        /* llamada a función */
-   | expression PLUS  expression
+      {: 
+        System.out.println("Procesando identificador: IDENTIFIER");
+      :}
+   | IDENTIFIER LPAREN arg_list_opt RPAREN
+      {: 
+        System.out.println("Llamada a función: IDENTIFIER LPAREN arg_list_opt RPAREN");
+      :}
+   | expression PLUS expression
+      {: 
+        System.out.println("Procesando expresión con '+': PLUS");
+      :}
    | expression MINUS expression
-   | expression STAR  expression
+      {: 
+        System.out.println("Procesando expresión con '-': MINUS");
+      :}
+   | expression STAR expression
+      {: 
+        System.out.println("Procesando expresión con '*': STAR");
+      :}
    | expression SLASH expression
-   | expression DIV   expression
-   | expression MOD   expression
-   | expression AND   expression
-   | expression OR    expression
+      {: 
+        System.out.println("Procesando expresión con '/': SLASH");
+      :}
+   | expression DIV expression
+      {: 
+        System.out.println("Procesando expresión con 'DIV': DIV");
+      :}
+   | expression MOD expression
+      {: 
+        System.out.println("Procesando expresión con 'MOD': MOD");
+      :}
+   | expression AND expression
+      {: 
+        System.out.println("Procesando expresión con 'AND': AND");
+      :}
+   | expression OR expression
+      {: 
+        System.out.println("Procesando expresión con 'OR': OR");
+      :}
    | NOT expression
-   | expression EQ    expression
-   | expression LT    expression
-   | expression GT    expression
-   | expression LE    expression
-   | expression GE    expression
-   | expression NE    expression
+      {: 
+        System.out.println("Procesando expresión con 'NOT': NOT");
+      :}
+   | expression EQ expression
+      {: 
+        System.out.println("Procesando expresión con 'EQ': EQ");
+      :}
+   | expression LT expression
+      {: 
+        System.out.println("Procesando expresión con 'LT': LT");
+      :}
+   | expression GT expression
+      {: 
+        System.out.println("Procesando expresión con 'GT': GT");
+      :}
+   | expression LE expression
+      {: 
+        System.out.println("Procesando expresión con 'LE': LE");
+      :}
+   | expression GE expression
+      {: 
+        System.out.println("Procesando expresión con 'GE': GE");
+      :}
+   | expression NE expression
+      {: 
+        System.out.println("Procesando expresión con 'NE': NE");
+      :}
    | LPAREN expression RPAREN
+      {: 
+        System.out.println("Procesando expresión dentro de paréntesis: LPAREN expression RPAREN");
+      :}
    | LPAREN error RPAREN
-      {: System.err.println("⚠️ Error dentro de paréntesis."); :}
+      {: 
+        System.err.println("⚠️ Error dentro de paréntesis.");
+      :}
    ;
+
 
 
 

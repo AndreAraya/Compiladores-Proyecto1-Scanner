@@ -1,7 +1,10 @@
 PROGRAM Demo;
-VAR x : INT;
+VAR
+    x : INT;
+    y : STRING;
 BEGIN
     x := 5;
+    y := "Hello";
 END
 
 

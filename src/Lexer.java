@@ -5,7 +5,6 @@
 import java.util.Locale;
 import java.util.HashMap;
 
-
 @SuppressWarnings("fallthrough")
 public class Lexer {
 
@@ -354,13 +353,13 @@ static {
     keywords.put("not",       TokenType.NOT);
     keywords.put("div",       TokenType.DIV);
     keywords.put("mod",       TokenType.MOD);
-
 }
 
 // ======= Métodos auxiliares =======
 private Token token(TokenType type) {
     return new Token(type, yytext(), yyline, yycolumn);
 }
+
 private Token token(TokenType type, Object value) {
     return new Token(type, yytext(), yyline, yycolumn, value);
 }
@@ -904,10 +903,21 @@ private void returnError(String msg) {
           case 57: break;
           case 18:
             { String lexeme = yytext();
-        TokenType type = keywords.get(lexeme.toLowerCase(Locale.ROOT));
-        if (type != null) return token(type);
-        System.err.println("Token nulo o desconocido encontrado en línea " + yyline + ": " + lexeme);
-        return token(TokenType.IDENTIFIER, lexeme);
+
+    // Depuración adicional para verificar cómo se está procesando el identificador
+    System.out.println("Identificador reconocido: " + lexeme);  // Esta línea te dará la información de cada identificador
+
+    TokenType type = keywords.get(lexeme.toLowerCase(Locale.ROOT));
+
+    // Si es una palabra clave, lo imprime
+    if (type != null) {
+        System.out.println("Token reconocido como palabra clave: " + lexeme + " -> " + type);
+        return token(type);
+    }
+
+    // Si no es una palabra clave, lo procesa como un identificador
+    System.out.println("Token reconocido como identificador: " + lexeme); // Este mensaje muestra identificadores no clave
+    return token(TokenType.IDENTIFIER, lexeme);
             }
           // fall through
           case 58: break;
