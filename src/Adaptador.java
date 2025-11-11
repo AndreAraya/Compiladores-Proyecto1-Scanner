@@ -63,12 +63,22 @@ public class Adaptador implements Scanner {
             case VAR:             return Sym.VAR;
             case FUNCTION:        return Sym.FUNCTION;
             case PROCEDURE:       return Sym.PROCEDURE;
+            case READ:            return Sym.READ;
+            case WRITE:           return Sym.WRITE;
+            case PROGRAM:         return Sym.PROGRAM;
 
             // === Tipos de datos ===
             case STRING_KEYWORD:  return Sym.STRING_KEYWORD;
             case INT_KEYWORD:     return Sym.INT_KEYWORD;
             case REAL_KEYWORD:    return Sym.REAL_KEYWORD;
             case CHAR_KEYWORD:    return Sym.CHAR_KEYWORD;
+
+            // === Operadores adicionales ===
+            case DIV:             return Sym.DIV;
+            case MOD:             return Sym.MOD;
+            case OR:              return Sym.OR;
+            case AND:             return Sym.AND;
+            case NOT:             return Sym.NOT;
 
             // === Fin y errores ===
             case EOF:             return Sym.EOF;

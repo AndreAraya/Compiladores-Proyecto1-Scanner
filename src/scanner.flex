@@ -36,6 +36,18 @@ static {
     keywords.put("int", TokenType.INT_KEYWORD);
     keywords.put("real", TokenType.REAL_KEYWORD);
     keywords.put("char", TokenType.CHAR_KEYWORD);
+    keywords.put("program",   TokenType.PROGRAM);
+    keywords.put("read",      TokenType.READ);
+    keywords.put("write",     TokenType.WRITE);
+    keywords.put("for",       TokenType.FOR);
+    keywords.put("to",        TokenType.TO);
+    keywords.put("downto",    TokenType.DOWNTO);
+    keywords.put("or",        TokenType.OR);
+    keywords.put("and",       TokenType.AND);
+    keywords.put("not",       TokenType.NOT);
+    keywords.put("div",       TokenType.DIV);
+    keywords.put("mod",       TokenType.MOD);
+
 }
 
 // ======= Métodos auxiliares =======
@@ -118,6 +130,7 @@ StringContent = [^\\\"\r\n] | {EscapeSeq}
     "*"         { return token(TokenType.STAR); }
     "/"         { return token(TokenType.SLASH); }
     ":="        { return token(TokenType.ASSIGN); }  
+    "="         { return token(TokenType.EQ); }
     "<"         { return token(TokenType.LT); }
     ">"         { return token(TokenType.GT); }
     ","         { return token(TokenType.COMMA); }
@@ -129,6 +142,10 @@ StringContent = [^\\\"\r\n] | {EscapeSeq}
     ":"         { return token(TokenType.COLON); }
     "."         { return token(TokenType.DOT); }
     "^"         { return token(TokenType.CARET); }
+    "MOD"       { return token(TokenType.MOD); }
+    "OR"        { return token(TokenType.OR); }
+    "AND"       { return token(TokenType.AND); }
+    "NOT"       { return token(TokenType.NOT); }
 
     // ==== Literales numéricos ====
     [0-9]+"."[0-9]+([eE][+-]?[0-9]+)?   { return token(TokenType.REAL_NUMBER, Double.parseDouble(yytext())); }
@@ -139,6 +156,7 @@ StringContent = [^\\\"\r\n] | {EscapeSeq}
         String lexeme = yytext();
         TokenType type = keywords.get(lexeme.toLowerCase(Locale.ROOT));
         if (type != null) return token(type);
+        System.err.println("Token nulo o desconocido encontrado en línea " + yyline + ": " + lexeme);
         return token(TokenType.IDENTIFIER, lexeme);
     }
 
@@ -162,7 +180,10 @@ StringContent = [^\\\"\r\n] | {EscapeSeq}
     }
 
     // ==== Otros errores ====
-    . { return token(TokenType.ERROR); }
+    . { 
+        System.err.printf("Error: token inesperado '%s' en línea %d.%n", yytext(), yyline + 1);
+        return token(TokenType.ERROR); 
+    }
 }
 
 // ======= Estados de comentarios =======

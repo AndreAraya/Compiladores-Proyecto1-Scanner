@@ -1,10 +1,7 @@
-VAR
-  x: INT;
-  y: REAL;
-
+PROGRAM Demo;
+VAR x : INT;
 BEGIN
-  x := 10;
-  y := x + 2.5;
+    x := 5;
 END
 
 

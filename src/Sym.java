@@ -6,62 +6,58 @@
 /** CUP generated class containing symbol constants. */
 public class Sym {
   /* terminals */
-  public static final int SHR = 56;
-  public static final int STRING_LITERAL = 8;
-  public static final int FUNCTION = 30;
-  public static final int HEX_NUMBER = 5;
-  public static final int LBRACKET = 42;
-  public static final int POWER = 20;
-  public static final int INCREMENT = 21;
-  public static final int SHL = 55;
-  public static final int GE = 18;
-  public static final int CHAR_LITERAL = 9;
-  public static final int SLASH = 13;
-  public static final int REAL_KEYWORD = 38;
-  public static final int XOR = 54;
-  public static final int LPAREN = 40;
-  public static final int FOR = 33;
+  public static final int STRING_LITERAL = 5;
+  public static final int FUNCTION = 29;
+  public static final int HEX_NUMBER = 7;
+  public static final int POWER = 13;
+  public static final int GE = 20;
+  public static final int CHAR_LITERAL = 6;
+  public static final int SLASH = 14;
+  public static final int REAL_KEYWORD = 37;
+  public static final int LPAREN = 42;
+  public static final int FOR = 32;
   public static final int MINUS = 11;
-  public static final int DECREMENT = 22;
+  public static final int WRITE = 41;
   public static final int STAR = 12;
-  public static final int RPAREN = 41;
-  public static final int NOT = 51;
-  public static final int AND = 49;
+  public static final int RPAREN = 43;
+  public static final int NOT = 52;
+  public static final int AND = 51;
   public static final int SEMICOLON = 44;
-  public static final int LT = 15;
+  public static final int LT = 17;
   public static final int OR = 50;
   public static final int COMMA = 46;
-  public static final int DIV = 52;
-  public static final int BEGIN = 28;
+  public static final int DIV = 48;
+  public static final int BEGIN = 27;
   public static final int PLUS = 10;
-  public static final int ASSIGN = 14;
-  public static final int IF = 23;
-  public static final int CARET = 48;
+  public static final int ASSIGN = 15;
+  public static final int IF = 22;
   public static final int DOT = 47;
-  public static final int LE = 17;
+  public static final int LE = 19;
   public static final int EOF = 0;
-  public static final int RBRACKET = 43;
+  public static final int PROGRAM = 39;
   public static final int error = 1;
-  public static final int MOD = 53;
+  public static final int MOD = 49;
   public static final int NUMBER = 3;
   public static final int REAL_NUMBER = 4;
+  public static final int EQ = 16;
   public static final int COLON = 45;
-  public static final int ELSE = 25;
-  public static final int OCTAL_NUMBER = 7;
-  public static final int BIN_NUMBER = 6;
-  public static final int TO = 34;
-  public static final int WHILE = 32;
-  public static final int THEN = 24;
-  public static final int NE = 19;
-  public static final int INT_KEYWORD = 37;
-  public static final int END = 26;
-  public static final int STRING_KEYWORD = 36;
-  public static final int DOWNTO = 35;
-  public static final int CHAR_KEYWORD = 39;
-  public static final int GT = 16;
-  public static final int VAR = 29;
-  public static final int PROCEDURE = 31;
-  public static final int DO = 27;
+  public static final int ELSE = 24;
+  public static final int OCTAL_NUMBER = 9;
+  public static final int BIN_NUMBER = 8;
+  public static final int READ = 40;
+  public static final int TO = 33;
+  public static final int WHILE = 31;
+  public static final int THEN = 23;
+  public static final int NE = 21;
+  public static final int INT_KEYWORD = 36;
+  public static final int END = 25;
+  public static final int STRING_KEYWORD = 35;
+  public static final int DOWNTO = 34;
+  public static final int CHAR_KEYWORD = 38;
+  public static final int GT = 18;
+  public static final int VAR = 28;
+  public static final int PROCEDURE = 30;
+  public static final int DO = 26;
   public static final int IDENTIFIER = 2;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -69,24 +65,23 @@ public class Sym {
   "IDENTIFIER",
   "NUMBER",
   "REAL_NUMBER",
+  "STRING_LITERAL",
+  "CHAR_LITERAL",
   "HEX_NUMBER",
   "BIN_NUMBER",
   "OCTAL_NUMBER",
-  "STRING_LITERAL",
-  "CHAR_LITERAL",
   "PLUS",
   "MINUS",
   "STAR",
+  "POWER",
   "SLASH",
   "ASSIGN",
+  "EQ",
   "LT",
   "GT",
   "LE",
   "GE",
   "NE",
-  "POWER",
-  "INCREMENT",
-  "DECREMENT",
   "IF",
   "THEN",
   "ELSE",
@@ -104,23 +99,20 @@ public class Sym {
   "INT_KEYWORD",
   "REAL_KEYWORD",
   "CHAR_KEYWORD",
+  "PROGRAM",
+  "READ",
+  "WRITE",
   "LPAREN",
   "RPAREN",
-  "LBRACKET",
-  "RBRACKET",
   "SEMICOLON",
   "COLON",
   "COMMA",
   "DOT",
-  "CARET",
-  "AND",
-  "OR",
-  "NOT",
   "DIV",
   "MOD",
-  "XOR",
-  "SHL",
-  "SHR"
+  "OR",
+  "AND",
+  "NOT"
   };
 }
 

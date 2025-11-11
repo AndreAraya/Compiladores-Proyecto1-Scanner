@@ -31,28 +31,31 @@ parser code {:
 :}
 
 /* ======= Terminales ======= */
-terminal String IDENTIFIER, NUMBER, REAL_NUMBER, HEX_NUMBER, BIN_NUMBER, OCTAL_NUMBER, STRING_LITERAL, CHAR_LITERAL;
-terminal PLUS, MINUS, STAR, SLASH, ASSIGN, LT, GT, LE, GE, NE, POWER, INCREMENT, DECREMENT;
+terminal String IDENTIFIER, NUMBER, REAL_NUMBER, STRING_LITERAL, CHAR_LITERAL, HEX_NUMBER, BIN_NUMBER, OCTAL_NUMBER;
+terminal PLUS, MINUS, STAR, POWER, SLASH, ASSIGN, EQ, LT, GT, LE, GE, NE;
 terminal IF, THEN, ELSE, END, DO, BEGIN, VAR, FUNCTION, PROCEDURE, WHILE, FOR, TO, DOWNTO;
 terminal STRING_KEYWORD, INT_KEYWORD, REAL_KEYWORD, CHAR_KEYWORD;
-terminal LPAREN, RPAREN, LBRACKET, RBRACKET, SEMICOLON, COLON, COMMA, DOT, CARET;
-terminal AND, OR, NOT, DIV, MOD, XOR, SHL, SHR;
+terminal PROGRAM, READ, WRITE;
+terminal LPAREN, RPAREN, SEMICOLON, COLON, COMMA, DOT;
+terminal DIV, MOD, OR, AND, NOT;
 
 /* ======= No terminales ======= */
-non terminal program, statement_list, statement;
-non terminal expression, type;
-non terminal function_declaration, procedure_declaration;
-non terminal parameter_list, parameter;
+non terminal program, block, statement_list, statement, statement_list_opt, expression;
+non terminal type, function_declaration, procedure_declaration;
+non terminal parameter_list_opt, parameter_list, parameter;
 non terminal variable_sections_opt, variable_sections, variable_section;
 non terminal decl_group_list, decl_group, variable_declaration_item_list, variable_declaration_item;
+non terminal function_list_opt, function_list;
+non terminal arg_list_opt, arg_list, return_statement;
 
 /* ======= Precedencias ======= */
+precedence left BEGIN;
 precedence nonassoc THEN;
 precedence right   ELSE;
-precedence nonassoc LT, GT, LE, GE, NE;
-precedence left  PLUS, MINUS, OR, XOR;
-precedence left  STAR, SLASH, DIV, MOD, AND, SHL, SHR;
-precedence right POWER;
+precedence nonassoc LT, GT, LE, GE, NE, EQ;
+precedence left  PLUS, MINUS, OR;
+precedence left  STAR, SLASH, DIV, MOD, AND;
+precedence right NOT;
 
 /* ======= Símbolo inicial ======= */
 start with program;
@@ -61,52 +64,56 @@ start with program;
 
 /* ===== Programa principal ===== */
 program
-  ::= variable_sections_opt BEGIN statement_list END
-   | variable_sections_opt BEGIN error END
-      {: System.err.println("⚠️ Error en bloque principal."); :}
+  ::= PROGRAM IDENTIFIER SEMICOLON
+      variable_sections_opt
+      function_list_opt
+      block
+   | PROGRAM IDENTIFIER SEMICOLON
+      variable_sections_opt
+      function_list_opt
+      error
+      {: System.err.println("⚠️ Error en el bloque principal."); :}
    ;
 
-/* ===== Bloques VAR (0 o más) ===== */
+/* ===== Bloque principal BEGIN...END ===== */
+block
+  ::= BEGIN statement_list END 
+   | BEGIN error END 
+      {: System.err.println("⚠️ Error dentro del bloque principal."); :}
+   ;
+
+/* ===== Declaraciones VAR ===== */
 variable_sections_opt
   ::= /* vacío */
    | variable_sections
    ;
 
 variable_sections
-  ::= variable_sections variable_section
-   | variable_section
-   ;
-
-/* Un bloque VAR con una o más declaraciones */
-variable_section
-  ::= VAR decl_group_list
+  ::= VAR decl_group_list SEMICOLON
+   | VAR decl_group_list SEMICOLON variable_sections
    | VAR error SEMICOLON
-      {: System.err.println("⚠️ Error en declaración de variables."); :}
+      {: System.err.println("⚠️ Error en bloque VAR."); :}
    ;
 
-/* Secuencia de grupos terminados en ';' */
 decl_group_list
   ::= decl_group_list decl_group
    | decl_group
    ;
 
-/* Grupo de declaración: x, y: INT; */
 decl_group
-  ::= variable_declaration_item_list SEMICOLON
+  ::= variable_declaration_item_list COLON type SEMICOLON
    ;
 
-/* Lista de ítems x, y: INT */
 variable_declaration_item_list
   ::= variable_declaration_item_list COMMA variable_declaration_item
    | variable_declaration_item
    ;
 
-/* Ítem individual */
 variable_declaration_item
-  ::= IDENTIFIER COLON type
+  ::= IDENTIFIER
    ;
 
-/* Tipos */
+/* ===== Tipos ===== */
 type
   ::= STRING_KEYWORD
    | INT_KEYWORD
@@ -114,51 +121,47 @@ type
    | CHAR_KEYWORD
    ;
 
-/* ===== Sentencias ===== */
-statement_list
-  ::= statement_list statement
-   | statement
+/* ===== Funciones y procedimientos ===== */
+function_list_opt
+  ::= /* vacío */
+   | function_list
    ;
 
-statement
-  ::= BEGIN statement_list END
-   | BEGIN error END
-      {: System.err.println("⚠️ Error en bloque BEGIN/END."); :}
-   | IF expression THEN statement
-   | IF expression THEN statement ELSE statement
-   | IF error THEN statement
-      {: System.err.println("⚠️ Error en condición de IF."); :}
-   | WHILE expression DO statement
-   | WHILE error DO statement
-      {: System.err.println("⚠️ Error en condición de WHILE."); :}
-   | FOR IDENTIFIER ASSIGN expression TO expression DO statement
-   | FOR IDENTIFIER ASSIGN expression DOWNTO expression DO statement
-   | FOR IDENTIFIER ASSIGN error DO statement
-      {: System.err.println("⚠️ Error en rango de FOR."); :}
-   | IDENTIFIER ASSIGN expression SEMICOLON
-   | IDENTIFIER ASSIGN error SEMICOLON
-      {: System.err.println("⚠️ Error en asignación."); :}
+function_list
+  ::= function_list function_declaration
+   | function_list procedure_declaration
    | function_declaration
    | procedure_declaration
    ;
 
-/* ===== Funciones ===== */
+/* ===== FUNCTION ===== */
 function_declaration
-  ::= FUNCTION IDENTIFIER LPAREN parameter_list RPAREN COLON type statement
-   | FUNCTION IDENTIFIER LPAREN RPAREN           COLON type statement
-   | FUNCTION IDENTIFIER LPAREN error RPAREN     COLON type statement
+  ::= FUNCTION IDENTIFIER LPAREN parameter_list_opt RPAREN COLON type
+      BEGIN variable_sections_opt statement_list return_statement END SEMICOLON
+   | FUNCTION IDENTIFIER LPAREN error RPAREN COLON type BEGIN statement_list END SEMICOLON
       {: System.err.println("⚠️ Error en parámetros de función."); :}
    ;
 
-/* ===== Procedimientos ===== */
+return_statement
+  ::= IDENTIFIER ASSIGN expression SEMICOLON
+      {: System.out.println("📤 Retorno de función detectado correctamente."); :}
+   | error SEMICOLON
+      {: System.err.println("⚠️ Falta retorno correcto en función."); :}
+   ;
+
+/* ===== PROCEDURE ===== */
 procedure_declaration
-  ::= PROCEDURE IDENTIFIER LPAREN parameter_list RPAREN statement
-   | PROCEDURE IDENTIFIER LPAREN RPAREN                 statement
-   | PROCEDURE IDENTIFIER LPAREN error RPAREN           statement
+  ::= PROCEDURE IDENTIFIER LPAREN parameter_list_opt RPAREN
+      BEGIN variable_sections_opt statement_list END SEMICOLON
+   | PROCEDURE IDENTIFIER LPAREN error RPAREN BEGIN statement_list END SEMICOLON
       {: System.err.println("⚠️ Error en parámetros de procedimiento."); :}
    ;
 
-/* ===== Parámetros ===== */
+parameter_list_opt
+  ::= /* vacío */
+   | parameter_list
+   ;
+
 parameter_list
   ::= parameter_list COMMA parameter
    | parameter
@@ -168,16 +171,47 @@ parameter
   ::= type IDENTIFIER
    ;
 
+/* ===== Sentencias ===== */
+statement_list
+  ::= statement_list statement 
+   | statement
+   ;
+
+
+statement
+  ::= BEGIN statement_list END
+   | IF expression THEN statement
+   | IF expression THEN statement ELSE statement
+   | WHILE expression DO statement
+   | FOR IDENTIFIER ASSIGN expression TO expression DO statement
+   | FOR IDENTIFIER ASSIGN expression DOWNTO expression DO statement
+   | IDENTIFIER ASSIGN expression SEMICOLON
+   | READ LPAREN arg_list_opt RPAREN SEMICOLON      /* ✅ puede no tener parámetros */
+   | WRITE LPAREN arg_list RPAREN SEMICOLON         /* ✅ debe tener al menos uno */
+   | variable_section
+   | error SEMICOLON
+      {: System.err.println("⚠️ Error general en sentencia."); :}
+   ;
+
+/* ===== Argumentos ===== */
+arg_list_opt
+  ::= /* vacío */
+   | arg_list
+   ;
+
+arg_list
+  ::= arg_list COMMA expression
+   | expression
+   ;
+
 /* ===== Expresiones ===== */
 expression
   ::= NUMBER
    | REAL_NUMBER
-   | HEX_NUMBER
-   | BIN_NUMBER
-   | OCTAL_NUMBER
    | STRING_LITERAL
    | CHAR_LITERAL
    | IDENTIFIER
+   | IDENTIFIER LPAREN arg_list_opt RPAREN        /* llamada a función */
    | expression PLUS  expression
    | expression MINUS expression
    | expression STAR  expression
@@ -186,19 +220,18 @@ expression
    | expression MOD   expression
    | expression AND   expression
    | expression OR    expression
-   | expression XOR   expression
-   | expression SHL   expression
-   | expression SHR   expression
+   | NOT expression
+   | expression EQ    expression
    | expression LT    expression
    | expression GT    expression
    | expression LE    expression
    | expression GE    expression
    | expression NE    expression
-   | expression POWER expression
    | LPAREN expression RPAREN
    | LPAREN error RPAREN
       {: System.err.println("⚠️ Error dentro de paréntesis."); :}
    ;
+
 
 
 
