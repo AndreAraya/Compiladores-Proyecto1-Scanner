@@ -1,27 +1,57 @@
 import java_cup.runtime.*;
 import java.util.*;
 
+/* ======= Código del parser ======= */
+parser code {:
+    private java.util.List<String> erroresSintacticos = new java.util.ArrayList<>();
+
+    @Override
+    public void syntax_error(Symbol sym) {
+        String msg = String.format(
+            "Error sintáctico en línea %d, columna %d: token inesperado '%s'",
+            sym.left, sym.right, sym.value
+        );
+        erroresSintacticos.add(msg);
+        System.err.println("⚠️ " + msg);
+    }
+
+    @Override
+    public void unrecovered_syntax_error(Symbol sym) throws Exception {
+        String msg = String.format(
+            "Error grave en línea %d, columna %d: '%s'",
+            sym.left, sym.right, sym.value
+        );
+        erroresSintacticos.add(msg);
+        System.err.println("❌ " + msg);
+    }
+
+    public java.util.List<String> getErroresSintacticos() {
+        return erroresSintacticos;
+    }
+:}
+
 /* ======= Terminales ======= */
-terminal String IDENTIFIER, NUMBER, STRING_LITERAL;
-terminal PLUS, MINUS, STAR, SLASH, ASSIGN, LT, GT, LE, GE, NE, POWER;
-terminal IF, THEN, ELSE, END, DO, BEGIN, VAR, FUNCTION, PROCEDURE, WHILE, FOR, TO;
+terminal String IDENTIFIER, NUMBER, REAL_NUMBER, HEX_NUMBER, BIN_NUMBER, OCTAL_NUMBER, STRING_LITERAL, CHAR_LITERAL;
+terminal PLUS, MINUS, STAR, SLASH, ASSIGN, LT, GT, LE, GE, NE, POWER, INCREMENT, DECREMENT;
+terminal IF, THEN, ELSE, END, DO, BEGIN, VAR, FUNCTION, PROCEDURE, WHILE, FOR, TO, DOWNTO;
 terminal STRING_KEYWORD, INT_KEYWORD, REAL_KEYWORD, CHAR_KEYWORD;
-terminal LPAREN, RPAREN, SEMICOLON, COLON, COMMA;
+terminal LPAREN, RPAREN, LBRACKET, RBRACKET, SEMICOLON, COLON, COMMA, DOT, CARET;
+terminal AND, OR, NOT, DIV, MOD, XOR, SHL, SHR;
 
 /* ======= No terminales ======= */
 non terminal program, statement_list, statement;
-non terminal expression, variable_declaration, type;
+non terminal expression, type;
 non terminal function_declaration, procedure_declaration;
-non terminal variable_declaration_list, variable_declaration_item;
 non terminal parameter_list, parameter;
+non terminal variable_sections_opt, variable_sections, variable_section;
+non terminal decl_group_list, decl_group, variable_declaration_item_list, variable_declaration_item;
 
 /* ======= Precedencias ======= */
 precedence nonassoc THEN;
 precedence right   ELSE;
-
 precedence nonassoc LT, GT, LE, GE, NE;
-precedence left  PLUS, MINUS;
-precedence left  STAR, SLASH;
+precedence left  PLUS, MINUS, OR, XOR;
+precedence left  STAR, SLASH, DIV, MOD, AND, SHL, SHR;
 precedence right POWER;
 
 /* ======= Símbolo inicial ======= */
@@ -29,46 +59,49 @@ start with program;
 
 /* ======= Gramática ======= */
 
-/* Programa principal */
-program ::= statement_list
-          | error SEMICOLON { System.err.println("⚠️ Error general en programa: sentencia incorrecta."); }
-          ;
-
-/* Lista de sentencias */
-statement_list
-  ::= statement_list statement
-   | statement
+/* ===== Programa principal ===== */
+program
+  ::= variable_sections_opt BEGIN statement_list END
+   | variable_sections_opt BEGIN error END
+      {: System.err.println("⚠️ Error en bloque principal."); :}
    ;
 
-/* Sentencias principales */
-statement
-  ::= BEGIN statement_list END
-   | BEGIN error END  { System.err.println("⚠️ Error en bloque BEGIN/END."); }
-   | IF expression THEN statement
-   | IF expression THEN statement ELSE statement
-   | IF error THEN statement  { System.err.println("⚠️ Error en condición de IF."); }
-   | WHILE expression DO statement
-   | WHILE error DO statement { System.err.println("⚠️ Error en condición de WHILE."); }
-   | FOR IDENTIFIER ASSIGN expression TO expression DO statement
-   | FOR IDENTIFIER ASSIGN error DO statement { System.err.println("⚠️ Error en rango de FOR."); }
-   | IDENTIFIER ASSIGN expression SEMICOLON
-   | IDENTIFIER ASSIGN error SEMICOLON { System.err.println("⚠️ Error en asignación."); }
-   | function_declaration
-   | procedure_declaration
-   | variable_declaration
+/* ===== Bloques VAR (0 o más) ===== */
+variable_sections_opt
+  ::= /* vacío */
+   | variable_sections
    ;
 
-/* Declaración de variables */
-variable_declaration
-  ::= VAR variable_declaration_list SEMICOLON
-   | VAR error SEMICOLON { System.err.println("⚠️ Error en declaración de variables."); }
+variable_sections
+  ::= variable_sections variable_section
+   | variable_section
    ;
 
-variable_declaration_list
-  ::= variable_declaration_list COMMA variable_declaration_item
+/* Un bloque VAR con una o más declaraciones */
+variable_section
+  ::= VAR decl_group_list
+   | VAR error SEMICOLON
+      {: System.err.println("⚠️ Error en declaración de variables."); :}
+   ;
+
+/* Secuencia de grupos terminados en ';' */
+decl_group_list
+  ::= decl_group_list decl_group
+   | decl_group
+   ;
+
+/* Grupo de declaración: x, y: INT; */
+decl_group
+  ::= variable_declaration_item_list SEMICOLON
+   ;
+
+/* Lista de ítems x, y: INT */
+variable_declaration_item_list
+  ::= variable_declaration_item_list COMMA variable_declaration_item
    | variable_declaration_item
    ;
 
+/* Ítem individual */
 variable_declaration_item
   ::= IDENTIFIER COLON type
    ;
@@ -81,21 +114,51 @@ type
    | CHAR_KEYWORD
    ;
 
-/* Funciones */
+/* ===== Sentencias ===== */
+statement_list
+  ::= statement_list statement
+   | statement
+   ;
+
+statement
+  ::= BEGIN statement_list END
+   | BEGIN error END
+      {: System.err.println("⚠️ Error en bloque BEGIN/END."); :}
+   | IF expression THEN statement
+   | IF expression THEN statement ELSE statement
+   | IF error THEN statement
+      {: System.err.println("⚠️ Error en condición de IF."); :}
+   | WHILE expression DO statement
+   | WHILE error DO statement
+      {: System.err.println("⚠️ Error en condición de WHILE."); :}
+   | FOR IDENTIFIER ASSIGN expression TO expression DO statement
+   | FOR IDENTIFIER ASSIGN expression DOWNTO expression DO statement
+   | FOR IDENTIFIER ASSIGN error DO statement
+      {: System.err.println("⚠️ Error en rango de FOR."); :}
+   | IDENTIFIER ASSIGN expression SEMICOLON
+   | IDENTIFIER ASSIGN error SEMICOLON
+      {: System.err.println("⚠️ Error en asignación."); :}
+   | function_declaration
+   | procedure_declaration
+   ;
+
+/* ===== Funciones ===== */
 function_declaration
   ::= FUNCTION IDENTIFIER LPAREN parameter_list RPAREN COLON type statement
    | FUNCTION IDENTIFIER LPAREN RPAREN           COLON type statement
-   | FUNCTION IDENTIFIER LPAREN error RPAREN     COLON type statement { System.err.println("⚠️ Error en parámetros de función."); }
+   | FUNCTION IDENTIFIER LPAREN error RPAREN     COLON type statement
+      {: System.err.println("⚠️ Error en parámetros de función."); :}
    ;
 
-/* Procedimientos */
+/* ===== Procedimientos ===== */
 procedure_declaration
   ::= PROCEDURE IDENTIFIER LPAREN parameter_list RPAREN statement
    | PROCEDURE IDENTIFIER LPAREN RPAREN                 statement
-   | PROCEDURE IDENTIFIER LPAREN error RPAREN           statement { System.err.println("⚠️ Error en parámetros de procedimiento."); }
+   | PROCEDURE IDENTIFIER LPAREN error RPAREN           statement
+      {: System.err.println("⚠️ Error en parámetros de procedimiento."); :}
    ;
 
-/* Parámetros */
+/* ===== Parámetros ===== */
 parameter_list
   ::= parameter_list COMMA parameter
    | parameter
@@ -105,15 +168,27 @@ parameter
   ::= type IDENTIFIER
    ;
 
-/* Expresiones */
+/* ===== Expresiones ===== */
 expression
   ::= NUMBER
+   | REAL_NUMBER
+   | HEX_NUMBER
+   | BIN_NUMBER
+   | OCTAL_NUMBER
    | STRING_LITERAL
+   | CHAR_LITERAL
    | IDENTIFIER
    | expression PLUS  expression
    | expression MINUS expression
    | expression STAR  expression
    | expression SLASH expression
+   | expression DIV   expression
+   | expression MOD   expression
+   | expression AND   expression
+   | expression OR    expression
+   | expression XOR   expression
+   | expression SHL   expression
+   | expression SHR   expression
    | expression LT    expression
    | expression GT    expression
    | expression LE    expression
@@ -121,31 +196,12 @@ expression
    | expression NE    expression
    | expression POWER expression
    | LPAREN expression RPAREN
-   | LPAREN error RPAREN { System.err.println("⚠️ Error dentro de paréntesis."); }
+   | LPAREN error RPAREN
+      {: System.err.println("⚠️ Error dentro de paréntesis."); :}
    ;
 
-/* ======= Manejador de errores global ======= */
-parser code {:
-    private List<String> erroresSintacticos = new ArrayList<>();
 
-    @Override
-    public void syntax_error(Symbol sym) {
-        String msg = String.format("Error sintáctico en línea %d, columna %d: token inesperado '%s'",
-                sym.left, sym.right, sym.value);
-        erroresSintacticos.add(msg);
-        System.err.println("⚠️ " + msg);
-    }
 
-    @Override
-    public void unrecovered_syntax_error(Symbol sym) throws Exception {
-        String msg = String.format("Error grave en línea %d, columna %d: '%s'",
-                sym.left, sym.right, sym.value);
-        erroresSintacticos.add(msg);
-        System.err.println("❌ " + msg);
-        // No lanzamos excepción para continuar el análisis
-    }
 
-    public List<String> getErroresSintacticos() {
-        return erroresSintacticos;
-    }
-:}
+
+

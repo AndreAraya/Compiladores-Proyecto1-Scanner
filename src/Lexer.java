@@ -101,9 +101,9 @@ public class Lexer {
   private static final String ZZ_ACTION_PACKED_0 =
     "\5\0\1\1\1\2\1\3\1\1\1\4\1\5\1\6"+
     "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16"+
-    "\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26"+
-    "\2\27\1\30\1\27\2\3\1\31\3\0\1\32\1\33"+
-    "\1\34\1\35\1\36\3\0\1\37\1\40\1\41\1\42"+
+    "\1\17\1\20\1\21\1\22\1\23\1\24\1\25\2\26"+
+    "\1\27\1\26\2\3\1\30\3\0\1\31\1\32\1\33"+
+    "\1\34\1\35\3\0\1\36\1\37\1\40\1\41\1\42"+
     "\2\2\1\43\1\0\1\14\2\0\1\43";
 
   private static int [] zzUnpackAction() {
@@ -134,12 +134,12 @@ public class Lexer {
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\37\0\76\0\135\0\174\0\174\0\233\0\272"+
     "\0\331\0\370\0\174\0\u0117\0\u0136\0\174\0\u0155\0\174"+
-    "\0\u0174\0\u0193\0\174\0\174\0\u01b2\0\174\0\u01d1\0\u01f0"+
-    "\0\174\0\174\0\174\0\174\0\174\0\u020f\0\174\0\u022e"+
-    "\0\174\0\u024d\0\174\0\u026c\0\u028b\0\u02aa\0\174\0\174"+
-    "\0\174\0\174\0\174\0\u02c9\0\u02e8\0\u0307\0\174\0\174"+
-    "\0\174\0\174\0\174\0\u0326\0\u0345\0\u0364\0\u0364\0\u0383"+
-    "\0\u03a2\0\u03a2";
+    "\0\u0174\0\u0193\0\u01b2\0\174\0\u01d1\0\u01f0\0\u020f\0\174"+
+    "\0\174\0\174\0\174\0\174\0\u022e\0\174\0\u024d\0\174"+
+    "\0\u026c\0\174\0\u028b\0\u02aa\0\u02c9\0\174\0\174\0\174"+
+    "\0\174\0\174\0\u02e8\0\u0307\0\u0326\0\174\0\174\0\174"+
+    "\0\174\0\174\0\174\0\u0345\0\u0364\0\u0383\0\u0383\0\u03a2"+
+    "\0\u03c1\0\u03c1";
 
   private static int [] zzUnpackRowMap() {
     int [] result = new int[58];
@@ -167,25 +167,25 @@ public class Lexer {
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\6\2\7\1\0\1\7\1\10\1\11\1\12\1\13"+
     "\1\14\1\15\1\16\1\17\1\20\1\21\1\22\1\23"+
-    "\1\24\1\25\1\26\1\27\2\30\1\31\1\6\1\32"+
-    "\1\33\1\6\1\30\1\34\1\6\11\35\1\36\63\35"+
-    "\1\37\11\35\1\40\25\35\40\0\2\7\1\0\1\7"+
-    "\32\0\2\10\1\41\1\10\1\42\1\43\22\10\1\44"+
-    "\6\10\2\45\1\0\1\45\1\0\1\45\1\0\21\45"+
-    "\1\46\6\45\11\0\1\47\36\0\1\50\37\0\1\51"+
-    "\40\0\1\52\33\0\1\53\4\0\1\54\35\0\1\55"+
-    "\1\0\1\22\6\0\1\56\33\0\1\57\1\60\35\0"+
-    "\1\61\32\0\1\30\5\0\2\30\4\0\2\30\20\0"+
-    "\1\37\30\0\1\37\30\0\1\41\41\0\2\10\21\0"+
-    "\1\10\3\0\1\10\10\0\1\62\35\0\2\45\21\0"+
-    "\1\45\3\0\1\45\2\0\2\54\1\63\1\0\1\64"+
-    "\32\54\17\0\1\65\31\0\1\66\1\0\1\66\2\0"+
-    "\1\67\21\0\1\63\53\0\1\65\6\0\1\70\27\0"+
-    "\1\67\31\0\1\71\1\0\1\71\2\0\1\72\36\0"+
-    "\1\72\17\0";
+    "\1\24\1\25\1\6\1\26\2\27\1\30\1\6\1\31"+
+    "\1\32\1\6\1\27\1\33\1\6\11\34\1\35\63\34"+
+    "\1\36\11\34\1\37\25\34\40\0\2\7\1\0\1\7"+
+    "\32\0\2\10\1\40\1\10\1\41\1\42\22\10\1\43"+
+    "\6\10\2\44\1\0\1\44\1\0\1\44\1\0\21\44"+
+    "\1\45\6\44\11\0\1\46\36\0\1\47\37\0\1\50"+
+    "\40\0\1\51\33\0\1\52\4\0\1\53\35\0\1\54"+
+    "\1\0\1\22\6\0\1\55\33\0\1\56\36\0\1\57"+
+    "\1\60\35\0\1\61\32\0\1\27\5\0\2\27\4\0"+
+    "\2\27\20\0\1\36\30\0\1\36\30\0\1\40\41\0"+
+    "\2\10\21\0\1\10\3\0\1\10\10\0\1\62\35\0"+
+    "\2\44\21\0\1\44\3\0\1\44\2\0\2\53\1\63"+
+    "\1\0\1\64\32\53\17\0\1\65\31\0\1\66\1\0"+
+    "\1\66\2\0\1\67\21\0\1\63\53\0\1\65\6\0"+
+    "\1\70\27\0\1\67\31\0\1\71\1\0\1\71\2\0"+
+    "\1\72\36\0\1\72\17\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[961];
+    int [] result = new int[992];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -229,9 +229,9 @@ public class Lexer {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\4\0\1\10\1\11\4\1\1\11\2\1\1\11\1\1"+
-    "\1\11\2\1\2\11\1\1\1\11\2\1\5\11\1\1"+
-    "\1\11\1\1\1\11\1\1\1\11\3\0\5\11\3\0"+
-    "\5\11\2\1\1\0\1\1\2\0\1\1";
+    "\1\11\3\1\1\11\3\1\5\11\1\1\1\11\1\1"+
+    "\1\11\1\1\1\11\3\0\5\11\3\0\6\11\2\1"+
+    "\1\0\1\1\2\0\1\1";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[58];
@@ -870,81 +870,81 @@ private void returnError(String msg) {
           // fall through
           case 50: break;
           case 16:
-            { return token(TokenType.ASSIGN);
+            { return token(TokenType.GT);
             }
           // fall through
           case 51: break;
           case 17:
-            { return token(TokenType.GT);
-            }
-          // fall through
-          case 52: break;
-          case 18:
             { String lexeme = yytext();
         TokenType type = keywords.get(lexeme.toLowerCase(Locale.ROOT));
         if (type != null) return token(type);
         return token(TokenType.IDENTIFIER, lexeme);
             }
           // fall through
+          case 52: break;
+          case 18:
+            { return token(TokenType.LBRACKET);
+            }
+          // fall through
           case 53: break;
           case 19:
-            { return token(TokenType.LBRACKET);
+            { return token(TokenType.RBRACKET);
             }
           // fall through
           case 54: break;
           case 20:
-            { return token(TokenType.RBRACKET);
+            { return token(TokenType.CARET);
             }
           // fall through
           case 55: break;
           case 21:
-            { return token(TokenType.CARET);
+            { yybegin(COMMENT_CURLY_BRACE);
             }
           // fall through
           case 56: break;
           case 22:
-            { yybegin(COMMENT_CURLY_BRACE);
+            { /* ignorar */
             }
           // fall through
           case 57: break;
           case 23:
-            { /* ignorar */
+            { yybegin(YYINITIAL);
             }
           // fall through
           case 58: break;
           case 24:
-            { yybegin(YYINITIAL);
-            }
-          // fall through
-          case 59: break;
-          case 25:
             { String content = processEscapes(yytext().substring(1, yytext().length()-1));
         return token(TokenType.STRING_LITERAL, content);
             }
           // fall through
+          case 59: break;
+          case 25:
+            { yybegin(COMMENT_PAREN_STAR);
+            }
+          // fall through
           case 60: break;
           case 26:
-            { yybegin(COMMENT_PAREN_STAR);
+            { return token(TokenType.POWER);
             }
           // fall through
           case 61: break;
           case 27:
-            { return token(TokenType.POWER);
+            { return token(TokenType.INCREMENT);
             }
           // fall through
           case 62: break;
           case 28:
-            { return token(TokenType.INCREMENT);
+            { return token(TokenType.DECREMENT);
             }
           // fall through
           case 63: break;
           case 29:
-            { return token(TokenType.DECREMENT);
+            { yybegin(COMMENT);
             }
           // fall through
           case 64: break;
           case 30:
-            { yybegin(COMMENT);
+            { return token(TokenType.ASSIGN);
             }
           // fall through
           case 65: break;

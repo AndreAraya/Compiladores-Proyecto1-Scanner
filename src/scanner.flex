@@ -117,7 +117,7 @@ StringContent = [^\\\"\r\n] | {EscapeSeq}
     "-"         { return token(TokenType.MINUS); }
     "*"         { return token(TokenType.STAR); }
     "/"         { return token(TokenType.SLASH); }
-    "="         { return token(TokenType.ASSIGN); }
+    ":="        { return token(TokenType.ASSIGN); }  
     "<"         { return token(TokenType.LT); }
     ">"         { return token(TokenType.GT); }
     ","         { return token(TokenType.COMMA); }

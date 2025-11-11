@@ -6,49 +6,74 @@
 /** CUP generated class containing symbol constants. */
 public class Sym {
   /* terminals */
-  public static final int STRING_LITERAL = 4;
-  public static final int FUNCTION = 23;
-  public static final int POWER = 15;
-  public static final int GE = 13;
-  public static final int SLASH = 8;
-  public static final int REAL_KEYWORD = 30;
-  public static final int LPAREN = 32;
-  public static final int FOR = 26;
-  public static final int MINUS = 6;
-  public static final int STAR = 7;
-  public static final int RPAREN = 33;
-  public static final int SEMICOLON = 34;
-  public static final int LT = 10;
-  public static final int COMMA = 36;
-  public static final int BEGIN = 21;
-  public static final int PLUS = 5;
-  public static final int ASSIGN = 9;
-  public static final int IF = 16;
-  public static final int LE = 12;
+  public static final int SHR = 56;
+  public static final int STRING_LITERAL = 8;
+  public static final int FUNCTION = 30;
+  public static final int HEX_NUMBER = 5;
+  public static final int LBRACKET = 42;
+  public static final int POWER = 20;
+  public static final int INCREMENT = 21;
+  public static final int SHL = 55;
+  public static final int GE = 18;
+  public static final int CHAR_LITERAL = 9;
+  public static final int SLASH = 13;
+  public static final int REAL_KEYWORD = 38;
+  public static final int XOR = 54;
+  public static final int LPAREN = 40;
+  public static final int FOR = 33;
+  public static final int MINUS = 11;
+  public static final int DECREMENT = 22;
+  public static final int STAR = 12;
+  public static final int RPAREN = 41;
+  public static final int NOT = 51;
+  public static final int AND = 49;
+  public static final int SEMICOLON = 44;
+  public static final int LT = 15;
+  public static final int OR = 50;
+  public static final int COMMA = 46;
+  public static final int DIV = 52;
+  public static final int BEGIN = 28;
+  public static final int PLUS = 10;
+  public static final int ASSIGN = 14;
+  public static final int IF = 23;
+  public static final int CARET = 48;
+  public static final int DOT = 47;
+  public static final int LE = 17;
   public static final int EOF = 0;
+  public static final int RBRACKET = 43;
   public static final int error = 1;
+  public static final int MOD = 53;
   public static final int NUMBER = 3;
-  public static final int COLON = 35;
-  public static final int ELSE = 18;
-  public static final int TO = 27;
-  public static final int WHILE = 25;
-  public static final int THEN = 17;
-  public static final int NE = 14;
-  public static final int END = 19;
-  public static final int INT_KEYWORD = 29;
-  public static final int STRING_KEYWORD = 28;
-  public static final int CHAR_KEYWORD = 31;
-  public static final int GT = 11;
-  public static final int VAR = 22;
-  public static final int PROCEDURE = 24;
-  public static final int DO = 20;
+  public static final int REAL_NUMBER = 4;
+  public static final int COLON = 45;
+  public static final int ELSE = 25;
+  public static final int OCTAL_NUMBER = 7;
+  public static final int BIN_NUMBER = 6;
+  public static final int TO = 34;
+  public static final int WHILE = 32;
+  public static final int THEN = 24;
+  public static final int NE = 19;
+  public static final int INT_KEYWORD = 37;
+  public static final int END = 26;
+  public static final int STRING_KEYWORD = 36;
+  public static final int DOWNTO = 35;
+  public static final int CHAR_KEYWORD = 39;
+  public static final int GT = 16;
+  public static final int VAR = 29;
+  public static final int PROCEDURE = 31;
+  public static final int DO = 27;
   public static final int IDENTIFIER = 2;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "IDENTIFIER",
   "NUMBER",
+  "REAL_NUMBER",
+  "HEX_NUMBER",
+  "BIN_NUMBER",
+  "OCTAL_NUMBER",
   "STRING_LITERAL",
+  "CHAR_LITERAL",
   "PLUS",
   "MINUS",
   "STAR",
@@ -60,6 +85,8 @@ public class Sym {
   "GE",
   "NE",
   "POWER",
+  "INCREMENT",
+  "DECREMENT",
   "IF",
   "THEN",
   "ELSE",
@@ -72,15 +99,28 @@ public class Sym {
   "WHILE",
   "FOR",
   "TO",
+  "DOWNTO",
   "STRING_KEYWORD",
   "INT_KEYWORD",
   "REAL_KEYWORD",
   "CHAR_KEYWORD",
   "LPAREN",
   "RPAREN",
+  "LBRACKET",
+  "RBRACKET",
   "SEMICOLON",
   "COLON",
-  "COMMA"
+  "COMMA",
+  "DOT",
+  "CARET",
+  "AND",
+  "OR",
+  "NOT",
+  "DIV",
+  "MOD",
+  "XOR",
+  "SHL",
+  "SHR"
   };
 }
 

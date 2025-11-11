@@ -33,7 +33,7 @@
         "command": "cmd.exe",
         "args": ["/d", "/c", "java -cp \"libs\\java-cup-11b.jar;out\" Main"]
       },
-      "dependsOn": ["build"],
+      "dependsOn": [],
       "problemMatcher": []
     }
   ]
