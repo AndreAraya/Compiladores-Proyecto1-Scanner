@@ -1,5 +1,9 @@
+var x: int;
 begin
-var x = 10;
-// This is a comment
-/* Another comment */
-if (x > 5) { return true; }
+  if x > 3 then
+    y := x + 1;
+  while do
+    x := x + 1;
+end
+
+

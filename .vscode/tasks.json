@@ -1,28 +1,45 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "jflex",
-            "type": "shell",
-            "command": "java -jar ./libs/jflex-full-1.9.1.jar -d ./src ./src/JflexCompi.flex",
-            "problemMatcher": []
-        },
-        {
-            "label": "build",
-            "type": "shell",
-            "command": "javac -d ./out ./src/*.java",
-            "dependsOn": ["jflex"],
-            "problemMatcher": []
-        },
-        {
-            "label": "run",
-            "type": "shell",
-            "command": "java -cp ./out Main",
-            "dependsOn": ["build"],
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "jflex",
+      "type": "shell",
+      "command": "java -jar ./libs/jflex-full-1.9.1.jar -d ./src ./src/scanner.flex",
+      "problemMatcher": []
+    },
+    {
+      "label": "cup",
+      "type": "shell",
+      "command": "java -jar ./libs/java-cup-11b.jar -parser Parser -symbols Sym -destdir ./src ./src/parser.cup",
+      "dependsOn": ["jflex"],
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "javac -cp \"./libs/java-cup-11b.jar;./src\" -d ./out ./src/*.java",
+      "windows": {
+        "command": "cmd.exe",
+        "args": ["/d", "/c", "javac -cp \"libs\\java-cup-11b.jar;src\" -d out src\\*.java"]
+      },
+      "dependsOn": ["cup"],
+      "problemMatcher": []
+    },
+    {
+      "label": "run",
+      "type": "shell",
+      "command": "java -cp \"./libs/java-cup-11b.jar;./out\" Main",
+      "windows": {
+        "command": "cmd.exe",
+        "args": ["/d", "/c", "java -cp \"libs\\java-cup-11b.jar;out\" Main"]
+      },
+      "dependsOn": ["build"],
+      "problemMatcher": []
+    }
+  ]
 }
+
+
 
 
 
